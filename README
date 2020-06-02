@@ -1,3 +1,4 @@
-bison -d -v -r all ms_parser.y
-flex ms_lex.l
-gcc -o mycomp ms_parser.tab.c lex.yy.c cgen.c -lfl
+Run via the following procedure:
+  - cd into folder.
+  - type "$ make all" to create needed executables.
+  - type "$ make clean" to clean non needed or old compilers (.c, .h and anything else related) apart their flex and bison executables.
