@@ -1,13 +1,13 @@
-all: flex bison compiler print_init
+all: lexer parser compiler print_init
 
 	
-flex: 
+lexer: 
 	@flex ms_lex.l
 
 	
 
 	
-bison:
+parser:
 	@bison -d -v -r all ms_parser.y
 
 	

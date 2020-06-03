@@ -6,7 +6,9 @@
 #include "cgen.h"
 
 extern int yylex(void);
-extern int line_num;
+extern char*  yytext;
+extern int lineNum;
+
 %}
 
 %union
@@ -15,9 +17,12 @@ extern int line_num;
 }
 
 
-%token <crepr> IDENT
-%token <crepr> REAL 
-%token <crepr> STRING
+%token <crepr> TK_IDENT
+%token <crepr> TK_ARITHMETIC 
+%token <crepr> TK_STRING
+
+
+//Keywords
 
 %token KW_START
 %token KW_CONST
@@ -26,8 +31,46 @@ extern int line_num;
 %token KW_NUMBER
 %token KW_STRING
 %token KW_FUNCTION
+%token KW_IF
+%nonassoc KW_ELSE
+%token KW_WHILE
+%token KW_FOR
+%token KW_CONTINUE
+%token KW_BREAK
+%token KW_RETURN
+%token KW_BOOLEAN
+%token KW_TRUE
+%token KW_FALSE
+%token KW_NULL
+%right KW_NOT
+%token KW_AND
+%token KW_OR
 
-%token ASSIGN
+//Operators
+
+%left OP_ASSIGN
+%left OP_PLUS
+%left OP_MINUS;
+%left OP_MULT;
+%left OP_DIV;
+%left OP_MOD;
+%left OP_EQUAL;
+%left OP_NOT_EQUAL;
+%left OP_LESS;
+%left OP_LESS_EQUAL;
+
+%left DEL_SEMICOLON
+%left DEL_LEFT_PARENTH
+%left DEL_RIGHT_PARENTH
+%left DEL_COMMA
+%left DEL_LEFT_CURLY_BRACE
+%left DEL_RIGHT_CURLY_BRACE
+%left DEL_COLON
+
+
+%left DEL_LEFT_CURLY_BRACKET
+%left DEL_RIGHT_CURLY_BRACKET
+
 
 %start program
 
@@ -67,11 +110,11 @@ const_decl_list ',' const_decl_list_item { $$ = template("%s, %s", $1, $3); }
 ;
 
 const_decl_list_item: 
-decl_list_item_id ASSIGN expr { $$ = template("%s =%s", $1, $3);}
+decl_list_item_id OP_ASSIGN expr { $$ = template("%s =%s", $1, $3);}
 ;
 
-decl_list_item_id: IDENT { $$ = $1; } 
-| IDENT '['']' { $$ = template("*%s", $1); }
+decl_list_item_id: TK_IDENT { $$ = $1; } 
+| TK_IDENT '['']' { $$ = template("*%s", $1); }
 ;
 
 type_spec: KW_NUMBER { $$ = "double"; }
@@ -86,7 +129,17 @@ body: { $$="";}
 ;
 
 %%
-int main () {
-  if ( yyparse() != 0 )
-    printf("Rejected!\n");
+
+
+int main () 
+{
+
+	int token;
+	while ( (token = yylex()) != EOF )
+	printf("\tLine %d Token %d: %s\n", lineNum, token, yytext);
+	
+	if ( yyparse() != 0 )
+    	printf("Rejected!\n");
+
+
 }

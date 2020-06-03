@@ -1,0 +1,3 @@
+bison -d -v -r all ms_parser.y
+flex ms_lex.l
+gcc -o mycomp ms_parser.tab.c lex.yy.c cgen.c -lfl

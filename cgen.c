@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include "cgen.h"
 
-extern int line_num;
+extern int lineNum;
 
 void ssopen(sstream *S)
 {
@@ -43,7 +43,7 @@ char *template(const char *pat, ...)
 void yyerror(char const *pat, ...)
 {
 	va_list arg;
-	fprintf(stderr, "line %d: ", line_num);
+	fprintf(stderr, "line %d: ", lineNum);
 
 	va_start(arg, pat);
 	vfprintf(stderr, pat, arg);
