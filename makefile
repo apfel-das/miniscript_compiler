@@ -23,6 +23,8 @@ clean:
 	@rm -f  ms_parser.tab.h
 	@rm -f *.output 
 	@rm -f ms_compiler
+	@rm -f ms_parser_output.c
+	
 
 	
 	

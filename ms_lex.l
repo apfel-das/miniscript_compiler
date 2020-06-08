@@ -21,23 +21,24 @@ DECIMAL ([+-]?"."{NUMBER})|([+-]?{NUMBER}("."{NUMBER}?)?)
 ARITHMETIC {DECIMAL}([eE][+-]?{NUMBER})?
 STRING  \"[^'\n]*\"
 
+
 %x comment
 %x line_comment
 
 %%
-start         	return KW_START;
-const 		  	return KW_CONST;
-var			  	return KW_VAR;
-void          	return KW_VOID;
-number        	return KW_NUMBER;
-string        	return KW_STRING;
-function      	return KW_FUNCTION;
-if 			  	return KW_IF;
-else 		  	return KW_ELSE;
-for 		  	return KW_FOR;
-while		  	return KW_WHILE;
-continue	  	return KW_CONTINUE;
-break 			return KW_BREAK;
+start         	{printf("TOKEN KEYWORD_START:\t%s\n", yytext); return KW_START;};
+const 		  	{printf("TOKEN KEYWORD_CONST:\t%s\n", yytext); return KW_CONST;};
+var			  	{printf("TOKEN KEYWORD_VAR:\t%s\n", yytext); return KW_VAR;};
+void          	{printf("TOKEN KEYWORD_VOID:\t%s\n", yytext); return KW_VOID;};
+number        	{printf("TOKEN KEYWORD_NUMBER:\t%s\n", yytext); return KW_NUMBER;};
+string        	{printf("TOKEN KEYWORD_STRING:\t%s\n", yytext); return KW_STRING;};
+function      	{printf("TOKEN KEYWORD_FUNCTION:\t%s\n", yytext); return KW_FUNCTION;};
+if 			  	{printf("TOKEN KEYWORD_IF:\t%s\n", yytext); return KW_IF;};
+else 		  	{printf("TOKEN KEYWORD_ELSE:\t%s\n", yytext); return KW_ELSE;};
+for 		  	{printf("TOKEN KEYWORD_FOR:\t%s\n", yytext); return KW_FOR;};
+while		  	{printf("TOKEN KEYWORD_WHILE:\t%s\n", yytext); return KW_WHILE;};
+continue	  	{printf("TOKEN KEYWORD_CONTINUE:\t%s\n", yytext); return KW_CONTINUE;};
+break 			{printf("TOKEN KEYWORD_BREAK:\t%s\n", yytext); return KW_BREAK;};
 return 			return KW_RETURN;
 boolean			return KW_BOOLEAN;
 true			return KW_TRUE;
@@ -51,9 +52,11 @@ or 				return KW_OR;
 
 
 
-{IDENT}  	    { yylval.crepr = strdup(yytext); return TK_IDENT; }
-{ARITHMETIC}	{ yylval.crepr = strdup(yytext); return TK_ARITHMETIC; }
-{STRING}		{ yylval.crepr = strdup(yytext); return TK_STRING; }
+{IDENT}  	    { yylval.crepr = strdup(yytext); printf("TOKEN IDENTIFIER: \t%s\n",yytext);  return TK_IDENT; }
+{NUMBER}    	{ yylval.crepr = strdup(yytext); printf("TOKEN INTEGER: \t%s\n", yytext);    return TK_INT; }
+{ARITHMETIC}	{ yylval.crepr = strdup(yytext); printf("TOKEN ARITHMETIC: \t%s\n", yytext); return TK_ARITHMETIC; }
+{STRING}		{ yylval.crepr = strdup(yytext); printf("TOKEN STRING: \t%s\n", yytext);     return TK_STRING; }
+
 
 "="		        return OP_ASSIGN;
 "+"				return OP_PLUS;
@@ -74,8 +77,8 @@ or 				return KW_OR;
 ")"				return DEL_RIGHT_PARENTH;
 "{"				return DEL_LEFT_CURLY_BRACE;
 "}"				return DEL_RIGHT_CURLY_BRACE;
-"["				return DEL_LEFT_CURLY_BRACKET;
-"]"				return DEL_RIGHT_CURLY_BRACKET;
+"["				return DEL_LEFT_BRACKET;
+"]"				return DEL_RIGHT_BRACKET;
 
 		/* Comments, Line comments, and some other stuff. [untabbing the comment will result to a flex error.hu]*/
 
@@ -85,7 +88,7 @@ or 				return KW_OR;
 
 "/*"					{BEGIN(comment);}
 <comment>[^*\n]*        								/* eat anything that's not a '*' */
-<comment>"*"+[^*/\n]*   								/* eat up '*'s not followed by ')'s */
+<comment>"*"+[^*/\n]*   								/* eat up '*'s not followed by '/'s */
 <comment>\n             ++lineNum;
 <comment>"*"+"/"        {BEGIN(INITIAL);}
 

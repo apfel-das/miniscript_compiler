@@ -1,3 +1,42 @@
-bison -d -v -r all ms_parser.y
-flex ms_lex.l
-gcc -o mycomp ms_parser.tab.c lex.yy.c cgen.c -lfl
+Code developed under COMP402 - Theory of Computation, ECE TUC 2019-20 Spring Sem.
+Although all assignment implementations should be pretty much the same, this was made from:
+
+	Konstantinos Pantelis -  LAB40245631
+	2015030070
+	Undergrad. Student@ECE TUC
+	github.com/dasApfel
+	
+
+BASICS:
+
+- ms_lex.l contains the syntax rules of the language,
+- ms_parser.y contains the "grammar" - parser of the language.
+- mslib.h has some useful functions for the final C99 executable to run.
+- unit_testing dir has some cool unit_tests.
+- cgen.c, .h: have useful C99 features for the parser to work with, please DO NOT MODIFY THEM without knowing what u're doing.
+- ./runScript could do some of the boring stuff for you [unit testing mostly.]
+
+
+
+COMPILATION  -  TESTING AND OTHERS.
+
+-Type "make all" to compile.
+-Type "make clean" to clean the build.
+-Type "lexer" or "parser" to only build either the lexer [FLEX] or the parser [BISON].
+-Inspect ms_parser_output.c for the compiled source code in C99.
+-Tests can be found under "unit_testing" directory, ["$ cd unit_testing"], feel free to play with them.
+-To check whether the compilated code is actually translated into valid C99, open a console of project folder and perform the above command sequence:
+
+		-"$ cd <project_dir>"
+		-"$ make all"
+		-"./ms_compiler < unit_testing/<test_name>.ms"
+		-gcc -o result ms_parser_output.c && ./result
+
+-Feel free to modify, test, contribute or do whatever u wish in total with it.
+
+Adding new features:
+
+-To define new symbols, tokens etc. modify ms_lex.l [be careful, indentation is important in this one]
+-To define rules and parsing patterns which will be supported play with ms_parser.y
+
+
